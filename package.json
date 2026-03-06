@@ -1,0 +1,13 @@
+{
+  "name": "trading-signal-bot",
+  "version": "1.0.0",
+  "description": "Full-stack Stock Trading Signal Bot",
+  "scripts": {
+    "dev": "concurrently --names \"BACKEND,FRONTEND\" --prefix-colors \"yellow,cyan\" \"start_backend.bat\" \"cd frontend && npm run dev\"",
+    "install:frontend": "cd frontend && npm install",
+    "install:backend": "cd backend && pip install -r requirements.txt"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}

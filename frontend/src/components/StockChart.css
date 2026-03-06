@@ -1,0 +1,148 @@
+.chart-panel {
+  background: #0a0a0a;
+  border: 1px solid #1e1e1e;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.chart-header {
+  padding: 1rem 1.25rem 0.75rem;
+  border-bottom: 1px solid #1a1a1a;
+}
+
+.chart-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.chart-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #e0e0e0;
+  margin: 0;
+}
+
+.chart-meta {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.price-tag {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #d4a017;
+}
+
+.rsi-tag {
+  font-size: 0.8rem;
+  font-weight: 700;
+  background: rgba(255,255,255,0.05);
+  padding: 2px 8px;
+  border-radius: 20px;
+}
+
+.symbol-tabs {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.sym-tab {
+  padding: 4px 12px;
+  border-radius: 6px;
+  border: 1px solid #252525;
+  background: #0f0f0f;
+  color: #666;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.03em;
+}
+
+.sym-tab:hover {
+  border-color: #d4a017;
+  color: #d4a017;
+}
+
+.sym-tab.active {
+  background: rgba(212, 160, 23, 0.12);
+  border-color: #d4a017;
+  color: #d4a017;
+}
+
+.chart-body {
+  flex: 1;
+  padding: 1rem;
+}
+
+.chart-area {
+  position: relative;
+}
+
+.price-chart {
+  height: 240px;
+  margin-bottom: 1rem;
+}
+
+.rsi-chart {
+  height: 140px;
+}
+
+.rsi-levels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 4px;
+}
+
+.rsi-line-label {
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+.rsi-line-label.overbought {
+  color: #ef4444;
+  background: rgba(239,68,68,0.1);
+}
+
+.rsi-line-label.oversold {
+  color: #22c55e;
+  background: rgba(34,197,94,0.1);
+}
+
+.chart-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 300px;
+  color: #555;
+  gap: 1rem;
+}
+
+.chart-spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid #1e1e1e;
+  border-top-color: #d4a017;
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.chart-error {
+  color: #ef4444;
+  text-align: center;
+  padding: 2rem;
+  font-size: 0.85rem;
+}

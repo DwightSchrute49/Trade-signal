@@ -1,0 +1,4 @@
+/* Keep index.css minimal — global styles live in App.css */
+body {
+  background: #050505;
+}

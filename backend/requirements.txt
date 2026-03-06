@@ -1,0 +1,11 @@
+fastapi
+uvicorn[standard]
+yfinance
+pandas
+ta
+psycopg2-binary
+sqlalchemy
+apscheduler
+python-dotenv
+passlib[bcrypt]
+python-jose[cryptography]
