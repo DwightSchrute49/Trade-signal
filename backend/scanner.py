@@ -19,7 +19,7 @@ def scan_stocks(db) -> list[dict]:
     results = []
 
     for symbol in SYMBOLS:
-        print(f"🔍 Scanning {symbol}...")
+        print(f"[SCAN] Scanning {symbol}...")
         data = calculate_indicators(symbol)
 
         if data is None:
@@ -51,6 +51,6 @@ def scan_stocks(db) -> list[dict]:
             "timestamp": db_signal.timestamp.isoformat() if db_signal.timestamp else None,
         })
 
-        print(f"   ✅ {symbol} → price={data['price']} rsi={data['rsi']} signal={signal_type}")
+        print(f"   [OK] {symbol} -> price={data['price']} rsi={data['rsi']} signal={signal_type}")
 
     return results

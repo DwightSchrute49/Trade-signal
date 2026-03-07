@@ -18,7 +18,7 @@ scheduler = BackgroundScheduler()
 def scheduled_scan():
     db = SessionLocal()
     try:
-        print("⏰ Scheduled scan running...")
+        print("[SCAN] Scheduled scan running...")
         scan_stocks(db)
     finally:
         db.close()
@@ -30,7 +30,7 @@ async def lifespan(app: FastAPI):
     create_tables()
     scheduler.add_job(scheduled_scan, "interval", minutes=5, id="stock_scan")
     scheduler.start()
-    print("🚀 Scheduler started — scanning every 5 minutes.")
+    print("[START] Scheduler started -- scanning every 5 minutes.")
     yield
     scheduler.shutdown(wait=False)
 
@@ -94,7 +94,7 @@ def get_stock_data(symbol: str, db: Session = Depends(get_db)):
 
 @app.post("/scan")
 def manual_scan(db: Session = Depends(get_db)):
-    print("🔄 Manual scan triggered via API...")
+    print("[SCAN] Manual scan triggered via API...")
     results = scan_stocks(db)
     return {"status": "success", "scanned": len(results), "signals": results}
 

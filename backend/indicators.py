@@ -12,7 +12,7 @@ def calculate_indicators(symbol: str, interval: str = "5m", period: str = "5d") 
         df = yf.download(symbol, interval=interval, period=period, progress=False, auto_adjust=True)
 
         if df.empty or len(df) < 20:
-            print(f"⚠️  Not enough data for {symbol}")
+            print(f"[WARN] Not enough data for {symbol}")
             return None
 
         # Flatten multi-level columns if present
@@ -71,5 +71,5 @@ def calculate_indicators(symbol: str, interval: str = "5m", period: str = "5d") 
         }
 
     except Exception as e:
-        print(f"❌ Error calculating indicators for {symbol}: {e}")
+        print(f"[ERROR] Error calculating indicators for {symbol}: {e}")
         return None
