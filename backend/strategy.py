@@ -1,16 +1,13 @@
-def evaluate_signal(rsi: float | None, price: float, ema200: float | None) -> str:
-    """
-    Signal strategy:
-      BUY  -> RSI < 30 AND price > EMA200
-      SELL -> RSI > 70
-      HOLD -> everything else
-    """
+def evaluate_signal(rsi, price, ema50):
+
     if rsi is None:
         return "HOLD"
 
-    if rsi < 30 and ema200 is not None and price > ema200:
+    if rsi < 35 and price > ema50:
         return "BUY"
-    elif rsi > 70:
+
+    elif rsi > 65 and price < ema50:
         return "SELL"
+
     else:
         return "HOLD"

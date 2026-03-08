@@ -15,3 +15,12 @@ export const triggerScan = () =>
 
 export const fetchSymbols = () =>
   API.get("/symbols").then((r) => r.data.symbols);
+
+export const fetchMarketScan = () =>
+  API.get("/market-scan").then((r) => r.data);
+
+export const fetchReversalAlerts = () =>
+  API.get("/reversal-alerts").then((r) => r.data.alerts);
+
+export const fetchTopBuys = () =>
+  API.get("/top-buys").then((r) => r.data.opportunities);

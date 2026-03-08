@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import {
   Chart as ChartJS,
@@ -13,15 +13,12 @@ import {
   Filler,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
-import { fetchStockData } from "../api";
 import "./StockChart.css";
 
 ChartJS.register(
   LineElement, PointElement, LinearScale, TimeScale,
   CategoryScale, Title, Tooltip, Legend, Filler
 );
-
-const SYMBOLS = ["RELIANCE.NS", "TCS.NS", "INFY.NS", "HDFCBANK.NS"];
 
 function buildPriceChart(data) {
   const labels = data.chart.map((d) => {
@@ -126,12 +123,10 @@ const chartOptions = (title, minY, maxY) => ({
   },
 });
 
-export default function StockChart() {
+const signalColors = { BUY: "#22c55e", SELL: "#ef4444", HOLD: "#888" };
+
+export default function StockChart({ stockData, loading, error }) {
   const chartRef = useRef(null);
-  const [selectedSymbol, setSelectedSymbol] = useState(SYMBOLS[0]);
-  const [stockData, setStockData] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
 
   useEffect(() => {
     gsap.fromTo(
@@ -141,19 +136,9 @@ export default function StockChart() {
     );
   }, []);
 
-  useEffect(() => {
-    let cancelled = false;
-    setLoading(true);
-    setError("");
-    fetchStockData(selectedSymbol)
-      .then((d) => { if (!cancelled) setStockData(d); })
-      .catch(() => { if (!cancelled) setError("Failed to load chart data. Ensure the backend is running."); })
-      .finally(() => { if (!cancelled) setLoading(false); });
-    return () => { cancelled = true; };
-  }, [selectedSymbol]);
-
   const rsiNow = stockData?.rsi;
   const rsiColor = rsiNow < 30 ? "#22c55e" : rsiNow > 70 ? "#ef4444" : "#f472b6";
+  const displaySymbol = stockData?.symbol?.replace(".NS", "") ?? "";
 
   return (
     <div ref={chartRef} className="chart-panel">
@@ -167,19 +152,22 @@ export default function StockChart() {
               <span className="rsi-tag" style={{ color: rsiColor }}>
                 RSI {stockData.rsi?.toFixed(1)}
               </span>
+              {stockData.ema50 != null && (
+                <span className="indicator-tag">EMA50 {stockData.ema50?.toFixed(2)}</span>
+              )}
+              {stockData.ema200 != null && (
+                <span className="indicator-tag">EMA200 {stockData.ema200?.toFixed(2)}</span>
+              )}
+              {stockData.signal && (
+                <span
+                  className="signal-tag"
+                  style={{ color: signalColors[stockData.signal] ?? "#888" }}
+                >
+                  {stockData.signal}
+                </span>
+              )}
             </div>
           )}
-        </div>
-        <div className="symbol-tabs">
-          {SYMBOLS.map((sym) => (
-            <button
-              key={sym}
-              className={`sym-tab ${selectedSymbol === sym ? "active" : ""}`}
-              onClick={() => setSelectedSymbol(sym)}
-            >
-              {sym.replace(".NS", "")}
-            </button>
-          ))}
         </div>
       </div>
 
@@ -199,7 +187,7 @@ export default function StockChart() {
             <div className="chart-area price-chart">
               <Line
                 data={buildPriceChart(stockData)}
-                options={chartOptions(`${selectedSymbol} — Price with EMA50 & EMA200`, undefined, undefined)}
+                options={chartOptions(`${displaySymbol} — Price with EMA50 & EMA200`, undefined, undefined)}
               />
             </div>
 
