@@ -37,7 +37,7 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
-    title="Trading Signal Bot",
+    title="TradePulse",
     description="Stock market BUY/SELL signal generator",
     version="1.0.0",
     lifespan=lifespan,
@@ -59,7 +59,7 @@ app.include_router(auth_router)
 # ── Routes ────────────────────────────────────────────────────────────────────
 @app.get("/")
 def root():
-    return {"status": "ok", "message": "Trading Signal Bot API is running 🚀"}
+    return {"status": "ok", "message": "TradePulse API is running 🚀"}
 
 
 @app.get("/signals")

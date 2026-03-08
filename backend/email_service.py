@@ -25,7 +25,7 @@ def send_otp_email(to_email: str, otp_code: str) -> bool:
         print(f"[DEV] OTP for {to_email}: {otp_code}")
         return True  # Allow dev flow to continue
 
-    subject = "Trading Signal Bot - Verify Your Email"
+    subject = "TradePulse - Verify Your Email"
 
     html_body = f"""
     <div style="font-family:'Segoe UI',Arial,sans-serif;max-width:480px;margin:0 auto;
@@ -36,7 +36,7 @@ def send_otp_email(to_email: str, otp_code: str) -> bool:
             <h1 style="margin:8px 0 0;font-size:20px;
                        background:linear-gradient(90deg,#d4a017,#f0c040);
                        -webkit-background-clip:text;-webkit-text-fill-color:transparent;">
-                Trading Signal Bot
+                TradePulse
             </h1>
         </div>
 
@@ -62,7 +62,7 @@ def send_otp_email(to_email: str, otp_code: str) -> bool:
     """
 
     msg = MIMEMultipart("alternative")
-    msg["From"] = f"Trading Signal Bot <{SMTP_EMAIL}>"
+    msg["From"] = f"TradePulse <{SMTP_EMAIL}>"
     msg["To"] = to_email
     msg["Subject"] = subject
     msg.attach(MIMEText(f"Your OTP code is: {otp_code}\n\nThis code expires in 10 minutes.", "plain"))
