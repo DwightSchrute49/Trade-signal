@@ -1,0 +1,9 @@
+{
+  "name": "tradepulse-backend-mailer",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Node dependencies for backend mailer",
+  "dependencies": {
+    "nodemailer": "^8.0.4"
+  }
+}
