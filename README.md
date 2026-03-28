@@ -1,138 +1,196 @@
-# 📈 Trading Signal Bot
+# TradePulse
 
-A modern full-stack stock trading dashboard that generates BUY/SELL signals for NSE (Indian market) stocks using technical indicators.
+TradePulse is a full-stack stock monitoring and signal platform with a FastAPI backend and a React + Vite frontend. It provides indicator-based signals, market scans, account authentication, OTP email flows, and Google sign-in.
 
-**Theme:** Black + Dark Gold | **Stack:** FastAPI + React/Vite + Neon PostgreSQL
+## Features
 
----
+- Authentication with username and password
+- Signup with OTP verification over email
+- Forgot password flow with OTP reset
+- Google sign-in using Google Identity Services
+- Live signal feed with BUY, SELL, and HOLD classifications
+- Symbol-specific chart and indicator data endpoints
+- Market scan, reversal alerts, and top buy opportunity endpoints
+- Automated background scanning every 5 minutes
+- Manual scan trigger from API and UI
+- PostgreSQL support (Neon) with SQLite fallback for local development
 
-## 🗂 Project Structure
+## Tech Stack
 
-```
+- Backend: FastAPI, SQLAlchemy, APScheduler
+- Frontend: React, Vite, Axios, Chart.js, GSAP
+- Auth: JWT, OTP-based email verification, Google ID token verification
+- Email: Nodemailer (invoked from backend via Node script)
+
+## Project Structure
+
+```text
 TradingBot/
-├── backend/
-│   ├── main.py          # FastAPI app + routes
-│   ├── database.py      # DB connection (Neon/SQLite fallback)
-│   ├── models.py        # SQLAlchemy Signal model
-│   ├── indicators.py    # RSI, EMA50, EMA200 via yfinance + ta
-│   ├── strategy.py      # BUY/SELL/HOLD logic
-│   ├── scanner.py       # Stock scanner + APScheduler
-│   ├── requirements.txt
-│   └── .env.example     # Copy to .env and fill in your DB URL
-└── frontend/
-    └── src/
-        ├── App.jsx
-        ├── api.js
-        ├── components/
-        │   ├── Navbar.jsx
-        │   ├── SignalTable.jsx
-        │   └── StockChart.jsx
-        └── pages/
-            └── Dashboard.jsx
+    backend/
+        auth.py
+        database.py
+        email_service.py
+        indicators.py
+        mailer.js
+        main.py
+        models.py
+        scanner.py
+        strategy.py
+        requirements.txt
+    frontend/
+        src/
+            components/
+            context/
+            pages/
+        package.json
+    start_backend.bat
+    package.json
 ```
 
----
+## Prerequisites
 
-## ⚙️ Backend Setup
+- Python 3.10+
+- Node.js 18+
+- npm
 
-### 1. Create a virtual environment
+## Environment Configuration
 
-```bash
-cd backend
-python -m venv venv
+### Backend environment (`backend/.env`)
 
-# Windows
-venv\Scripts\activate
+Copy `backend/.env.example` to `backend/.env` and configure:
 
-# macOS/Linux
-source venv/bin/activate
-```
-
-### 2. Install dependencies
-
-```bash
-pip install -r requirements.txt
-```
-
-### 3. Configure database (optional)
-
-Copy `.env.example` to `.env` and add your **Neon PostgreSQL** connection string:
-
-```
+```env
 DATABASE_URL=postgresql://user:password@host/dbname?sslmode=require
+SECRET_KEY=replace_with_a_strong_secret
+ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=1440
+GOOGLE_CLIENT_ID=your_google_web_client_id.apps.googleusercontent.com
+
+SMTP_EMAIL=your_sender_email
+SMTP_PASSWORD=your_email_app_password
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+OTP_EXPIRY_MINUTES=10
 ```
 
-> If you skip this, the app uses a local `signals.db` SQLite file automatically.
+Notes:
 
-### 4. Start the backend
+- If `DATABASE_URL` is missing, backend falls back to local SQLite (`signals.db`).
+- `GOOGLE_CLIENT_ID` must match the frontend Google client ID.
+- OTP email delivery requires SMTP credentials.
+
+### Frontend environment (`frontend/.env`)
+
+Copy `frontend/.env.example` to `frontend/.env` and configure:
+
+```env
+VITE_API_URL=http://localhost:8000
+VITE_GOOGLE_CLIENT_ID=your_google_web_client_id.apps.googleusercontent.com
+```
+
+## Installation
+
+### 1. Install root dependencies
+
+From the repository root:
 
 ```bash
-uvicorn main:app --reload
+npm install
 ```
 
-Backend runs at: **http://localhost:8000**
-
-API docs: **http://localhost:8000/docs**
-
----
-
-## 🖥️ Frontend Setup
-
-### 1. Install dependencies
+### 2. Install frontend dependencies
 
 ```bash
 cd frontend
 npm install
+cd ..
 ```
 
-### 2. Start the dev server
+### 3. Set up backend Python environment
+
+```bash
+cd backend
+python -m venv venv
+venv\Scripts\activate
+pip install -r requirements.txt
+cd ..
+```
+
+## Run the Application
+
+### Option A: Start backend and frontend together
+
+From repository root:
 
 ```bash
 npm run dev
 ```
 
-Frontend runs at: **http://localhost:5173**
+This runs:
 
----
+- Backend on `http://localhost:8000`
+- Frontend on `http://localhost:5173`
 
-## 🔌 API Endpoints
+### Option B: Start services separately
 
-| Method | Route | Description |
-|--------|-------|-------------|
-| `GET` | `/` | Health check |
-| `GET` | `/signals?limit=50` | Latest signals from DB |
-| `GET` | `/stock/{symbol}` | Chart data for a symbol |
-| `POST` | `/scan` | Trigger a manual scan |
-| `GET` | `/symbols` | List of tracked symbols |
+Backend:
 
----
+```bash
+start_backend.bat
+```
 
-## 📊 Signal Strategy
+Frontend:
 
-| Condition | Signal |
-|-----------|--------|
-| RSI < 30 **AND** Price > EMA200 | ✅ **BUY** |
-| RSI > 70 | 🔴 **SELL** |
-| Everything else | ⚪ HOLD |
+```bash
+cd frontend
+npm run dev
+```
 
----
+## API Overview
 
-## 🎯 Tracked Symbols
+Core routes:
 
-- `RELIANCE.NS`
-- `TCS.NS`
-- `INFY.NS`
-- `HDFCBANK.NS`
+- `GET /` - health check
+- `GET /signals?limit=50` - latest signals
+- `GET /stock/{symbol}` - indicator and signal data for one symbol
+- `POST /scan` - trigger manual scan
+- `GET /symbols` - tracked symbols
+- `GET /market-scan` - grouped latest market scan results
+- `GET /reversal-alerts` - oversold reversal candidates
+- `GET /top-buys` - bullish opportunity candidates
 
-> The backend scans all symbols **every 5 minutes** automatically.
-> You can also trigger a manual scan from the UI via the **"Scan Now"** button.
+Authentication routes:
 
----
+- `POST /auth/register/request-otp`
+- `POST /auth/register/verify-otp`
+- `POST /auth/forgot-password/request-otp`
+- `POST /auth/forgot-password/reset`
+- `POST /auth/login`
+- `POST /auth/google`
+- `GET /auth/me`
 
-## 🧩 Features
+Interactive API docs are available at:
 
-- **Live Signals Table** — color-coded BUY/SELL rows, auto-refreshes every 30s
-- **Stock Charts** — Price line with EMA50/EMA200 overlays + RSI chart
-- **GSAP Animations** — Navbar slide-in, signal stagger, chart slide
-- **Stat Cards** — Total / BUY / SELL / HOLD counters
-- **Responsive** — Works on desktop and mobile
+- `http://localhost:8000/docs`
+
+## Default Scan Universe
+
+The scanner tracks configured symbols in `backend/scanner.py` and runs every 5 minutes using APScheduler.
+
+## Troubleshooting
+
+- OTP appears sent but no email received:
+  - Confirm `SMTP_EMAIL`, `SMTP_PASSWORD`, `SMTP_HOST`, and `SMTP_PORT` in `backend/.env`.
+  - For Gmail, use an App Password.
+- Google sign-in reports not configured:
+  - Set both `backend/.env` `GOOGLE_CLIENT_ID` and `frontend/.env` `VITE_GOOGLE_CLIENT_ID`.
+  - Ensure Google OAuth Authorized JavaScript origin includes your frontend URL.
+- Database connection issues:
+  - Verify `DATABASE_URL` format and credentials.
+  - Remove unsupported URL query params if present.
+
+## Security Notes
+
+- Do not commit real secrets in `.env` files.
+- Rotate credentials immediately if they were ever shared.
+- Use a strong `SECRET_KEY` for JWT signing in non-local environments.

@@ -1,100 +1,35 @@
 .dashboard {
   min-height: 100vh;
-  background: #050505;
-  color: #e0e0e0;
+  background: transparent;
+  color: var(--text-primary);
 }
 
-/* Trading Insight Panels */
-.insight-panels {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-  padding: 1rem 1.5rem;
-}
-
-.insight-panel {
-  background: #0a0a0a;
-  border: 1px solid #1e1e1e;
-  border-radius: 12px;
-  overflow: hidden;
-}
-
-.reversal-panel { border-left: 3px solid #22c55e; }
-.bestbuy-panel { border-left: 3px solid #d4a017; }
-
-.insight-panel-title {
-  font-size: 0.95rem;
-  font-weight: 700;
-  color: #e0e0e0;
-  margin: 0;
-  padding: 0.9rem 1.25rem;
-  border-bottom: 1px solid #1a1a1a;
-}
-
-.insight-list {
-  list-style: none;
-  margin: 0;
-  padding: 0.75rem 1.25rem;
-}
-
-.insight-item {
+.hero-buttons {
   display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  padding: 0.6rem 0;
-  border-bottom: 1px solid #141414;
+  gap: 0.7rem;
+  flex-wrap: wrap;
 }
 
-.insight-item:last-child {
-  border-bottom: none;
+.btn-market-screener.btn-reversal {
+  border-color: #c8ddcf;
+  color: #1c7c47;
+  background: #edf8f0;
 }
-
-.insight-symbol {
-  font-weight: 700;
-  font-size: 1rem;
-  color: #e0e0e0;
+.btn-market-screener.btn-reversal:hover {
+  background: #dff1e5;
 }
-
-.insight-price {
-  font-size: 0.85rem;
-  color: #888;
+.btn-market-screener.btn-bestbuy {
+  border-color: #c4d7ec;
+  color: #2a5f96;
+  background: #eaf2fb;
 }
-
-.insight-rsi {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: #888;
-}
-
-.insight-rsi.rsi-green { color: #22c55e; }
-.insight-rsi.rsi-bright { color: #4ade80; }
-
-.insight-badge {
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: #22c55e;
-  margin-top: 0.2rem;
-}
-
-.insight-badge.bullish {
-  color: #d4a017;
-}
-
-.insight-empty {
-  color: #555;
-  font-size: 0.85rem;
-  padding: 0.6rem 0;
-}
-
-@media (max-width: 900px) {
-  .insight-panels {
-    grid-template-columns: 1fr;
-  }
+.btn-market-screener.btn-bestbuy:hover {
+  background: #dbe8f6;
 }
 
 .hero-section {
-  padding: 1.25rem 1.5rem 0.75rem;
-  border-bottom: 1px solid #111;
+  padding: 1.35rem 1.5rem 0.9rem;
+  border-bottom: 1px solid var(--border);
 }
 
 .hero-section-row {
@@ -108,73 +43,108 @@
 .btn-market-screener {
   display: inline-flex;
   align-items: center;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  border: 1px solid #d4a017;
-  background: rgba(212, 160, 23, 0.15);
-  color: #d4a017;
+  padding: 0.54rem 1rem;
+  border-radius: 999px;
+  border: 1px solid #ced8e3;
+  background: #fff;
+  color: #345370;
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   text-decoration: none;
-  transition: background 0.2s;
+  transition: all 0.2s;
 }
 
 .btn-market-screener:hover {
-  background: rgba(212, 160, 23, 0.25);
+  transform: translateY(-1px);
+  background: #f6f9fc;
+  border-color: #afc5dc;
 }
 
 .stat-cards {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(150px, 1fr));
+  gap: 0.8rem;
+  width: 100%;
 }
 
 .stat-card {
-  flex: 1;
-  min-width: 120px;
-  background: #0a0a0a;
-  border: 1px solid #1e1e1e;
-  border-radius: 10px;
-  padding: 0.9rem 1.2rem;
+  position: relative;
+  min-width: 0;
+  background: linear-gradient(165deg, #ffffff 0%, #f8fbff 100%);
+  border: 1px solid #d5e0eb;
+  border-radius: 16px;
+  padding: 0.95rem 1.05rem;
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
-  transition: transform 0.2s, box-shadow 0.2s;
+  gap: 0.35rem;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.8) inset,
+    0 8px 18px rgba(23, 49, 82, 0.06);
+  border-top: 1px solid #d5e0eb;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .stat-card:hover {
-  transform: translateY(-2px);
+  transform: translateY(-1px);
+  border-color: #b8cade;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.9) inset,
+    0 12px 26px rgba(23, 49, 82, 0.1);
 }
 
-.stat-card.total { border-left: 3px solid #d4a017; }
-.stat-card.buy   { border-left: 3px solid #22c55e; box-shadow: 0 0 20px rgba(34,197,94,0.05); }
-.stat-card.sell  { border-left: 3px solid #ef4444; box-shadow: 0 0 20px rgba(239,68,68,0.05); }
-.stat-card.hold  { border-left: 3px solid #555; }
+.stat-card::before {
+  content: "";
+  position: absolute;
+  left: 1.05rem;
+  right: 1.05rem;
+  top: 0;
+  height: 2px;
+  border-radius: 0 0 999px 999px;
+  background: linear-gradient(90deg, #d5e0eb, #c9d6e3, #d5e0eb);
+}
 
 .stat-num {
-  font-size: 2rem;
+  font-size: 2.15rem;
   font-weight: 800;
-  line-height: 1;
-  color: #fff;
+  line-height: 1.05;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
 }
 
-.stat-card.buy .stat-num   { color: #22c55e; }
-.stat-card.sell .stat-num  { color: #ef4444; }
-.stat-card.hold .stat-num  { color: #888; }
-.stat-card.total .stat-num { color: #d4a017; }
+.stat-card.buy .stat-num {
+  color: #1a3553;
+}
+.stat-card.sell .stat-num {
+  color: #1a3553;
+}
+.stat-card.hold .stat-num {
+  color: #1a3553;
+}
+.stat-card.total .stat-num {
+  color: #1a3553;
+}
 
 .stat-label {
-  font-size: 0.72rem;
-  color: #555;
-  font-weight: 600;
+  font-size: 0.69rem;
+  color: #62788f;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
+}
+
+.stat-sub {
+  font-size: 0.74rem;
+  color: #8395aa;
+  letter-spacing: 0.01em;
 }
 
 .main-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1rem;
+  gap: 1.1rem;
   padding: 1rem 1.5rem 1.5rem;
 }
 
@@ -197,50 +167,59 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background: #0a0a0a;
-  border: 1px solid #1e1e1e;
-  border-radius: 10px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 12px;
   padding: 0.25rem 0.5rem 0.25rem 1rem;
-  transition: border-color 0.2s;
+  box-shadow: var(--shadow-card);
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
 }
 
 .search-bar:focus-within {
-  border-color: #d4a017;
+  border-color: #acc5de;
+  box-shadow: 0 0 0 4px rgba(58, 132, 202, 0.12);
 }
 
 .search-icon {
-  font-size: 1rem;
-  opacity: 0.7;
+  font-size: 0.73rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 700;
+  color: var(--text-muted);
 }
 
 .search-input {
   flex: 1;
   background: transparent;
   border: none;
-  color: #e0e0e0;
+  color: var(--text-primary);
   font-size: 0.95rem;
   padding: 0.6rem 0;
   outline: none;
 }
 
 .search-input::placeholder {
-  color: #555;
+  color: #8da0b3;
 }
 
 .search-btn {
   padding: 0.5rem 1rem;
-  border-radius: 8px;
-  border: 1px solid #d4a017;
-  background: rgba(212, 160, 23, 0.15);
-  color: #d4a017;
+  border-radius: 10px;
+  border: 1px solid #b8cde3;
+  background: #eaf2fb;
+  color: #2a5f96;
   font-weight: 600;
   font-size: 0.85rem;
   cursor: pointer;
-  transition: background 0.2s, opacity 0.2s;
+  transition:
+    background 0.2s,
+    opacity 0.2s;
 }
 
 .search-btn:hover:not(:disabled) {
-  background: rgba(212, 160, 23, 0.25);
+  background: #dbe9f7;
 }
 
 .search-btn:disabled {
@@ -249,9 +228,10 @@
 }
 
 .panel {
-  background: #0a0a0a;
-  border: 1px solid #1e1e1e;
-  border-radius: 12px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: var(--shadow-soft);
   overflow: hidden;
   height: 100%;
 }
@@ -261,13 +241,13 @@
   align-items: center;
   gap: 0.6rem;
   padding: 1rem 1.25rem;
-  border-bottom: 1px solid #1a1a1a;
+  border-bottom: 1px solid var(--border);
 }
 
 .panel-title {
-  font-size: 1rem;
+  font-size: 0.98rem;
   font-weight: 700;
-  color: #e0e0e0;
+  color: var(--text-primary);
   margin: 0;
 }
 
@@ -276,17 +256,37 @@
   height: 8px;
   border-radius: 50%;
   background: #22c55e;
-  box-shadow: 0 0 8px #22c55e;
+  box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.16);
   animation: pulse 2s infinite;
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.6; transform: scale(1.3); }
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.3);
+  }
 }
 
 .live-text {
   font-size: 0.7rem;
-  color: #555;
+  color: var(--text-muted);
   margin-left: auto;
+}
+
+@media (max-width: 640px) {
+  .hero-section,
+  .main-grid {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .stat-cards {
+    grid-template-columns: repeat(2, minmax(120px, 1fr));
+    gap: 0.65rem;
+  }
 }

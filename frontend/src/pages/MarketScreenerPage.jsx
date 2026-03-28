@@ -27,8 +27,10 @@ export default function MarketScreenerPage() {
       <Navbar />
 
       <div className="screener-page-header">
-        <Link to="/" className="screener-back-link">← Dashboard</Link>
-        <h1 className="screener-page-title">⚡ Market Screener</h1>
+        <Link to="/" className="screener-back-link">
+          ← Dashboard
+        </Link>
+        <h1 className="screener-page-title">Market Screener</h1>
         <span className="screener-refresh-note">Auto-refreshes every 30s</span>
       </div>
 
@@ -39,8 +41,12 @@ export default function MarketScreenerPage() {
             <ul className="screener-list">
               {marketScan.buy.map((s) => (
                 <li key={s.symbol} className="screener-item">
-                  <span className="screener-symbol">{s.symbol.replace(".NS", "")}</span>
-                  <span className="screener-meta">₹{s.price} · RSI {s.rsi}</span>
+                  <span className="screener-symbol">
+                    {s.symbol.replace(".NS", "")}
+                  </span>
+                  <span className="screener-meta">
+                    ₹{s.price} · RSI {s.rsi}
+                  </span>
                 </li>
               ))}
               {marketScan.buy.length === 0 && (
@@ -53,8 +59,12 @@ export default function MarketScreenerPage() {
             <ul className="screener-list">
               {marketScan.sell.map((s) => (
                 <li key={s.symbol} className="screener-item">
-                  <span className="screener-symbol">{s.symbol.replace(".NS", "")}</span>
-                  <span className="screener-meta">₹{s.price} · RSI {s.rsi}</span>
+                  <span className="screener-symbol">
+                    {s.symbol.replace(".NS", "")}
+                  </span>
+                  <span className="screener-meta">
+                    ₹{s.price} · RSI {s.rsi}
+                  </span>
                 </li>
               ))}
               {marketScan.sell.length === 0 && (
@@ -67,8 +77,12 @@ export default function MarketScreenerPage() {
             <ul className="screener-list">
               {marketScan.hold.map((s) => (
                 <li key={s.symbol} className="screener-item">
-                  <span className="screener-symbol">{s.symbol.replace(".NS", "")}</span>
-                  <span className="screener-meta">₹{s.price} · RSI {s.rsi}</span>
+                  <span className="screener-symbol">
+                    {s.symbol.replace(".NS", "")}
+                  </span>
+                  <span className="screener-meta">
+                    ₹{s.price} · RSI {s.rsi}
+                  </span>
                 </li>
               ))}
               {marketScan.hold.length === 0 && (

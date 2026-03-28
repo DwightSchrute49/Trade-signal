@@ -1,7 +1,9 @@
 import axios from "axios";
 
+export const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
+
 const API = axios.create({
-  baseURL: "http://localhost:8000",
+  baseURL: API_BASE,
 });
 
 export const fetchSignals = (limit = 50) =>

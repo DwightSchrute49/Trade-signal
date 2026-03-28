@@ -1,7 +1,7 @@
 {
-  "name": "trading-signal-bot",
+  "name": "trade-pulse",
   "version": "1.0.0",
-  "description": "Full-stack Stock Trading Signal Bot",
+  "description": "Full-stack Stock Trading Dashboard — TradePulse",
   "scripts": {
     "dev": "concurrently --names \"BACKEND,FRONTEND\" --prefix-colors \"yellow,cyan\" \"start_backend.bat\" \"cd frontend && npm run dev\"",
     "install:frontend": "cd frontend && npm install",
@@ -9,5 +9,8 @@
   },
   "devDependencies": {
     "concurrently": "^9.1.2"
+  },
+  "dependencies": {
+    "nodemailer": "^8.0.4"
   }
 }

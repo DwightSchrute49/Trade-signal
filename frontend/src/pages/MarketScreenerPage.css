@@ -1,12 +1,12 @@
 .market-screener-page {
   min-height: 100vh;
-  background: #050505;
-  color: #e0e0e0;
+  background: transparent;
+  color: var(--text-primary);
 }
 
 .screener-page-header {
   padding: 1rem 1.5rem;
-  border-bottom: 1px solid #111;
+  border-bottom: 1px solid var(--border);
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -14,7 +14,7 @@
 }
 
 .screener-back-link {
-  color: #888;
+  color: var(--text-secondary);
   text-decoration: none;
   font-size: 0.9rem;
   font-weight: 600;
@@ -22,28 +22,29 @@
 }
 
 .screener-back-link:hover {
-  color: #d4a017;
+  color: #2a5f96;
 }
 
 .screener-page-title {
   font-size: 1.25rem;
   font-weight: 700;
-  color: #e0e0e0;
+  color: var(--text-primary);
   margin: 0;
 }
 
 .screener-refresh-note {
   font-size: 0.7rem;
-  color: #555;
+  color: var(--text-muted);
   margin-left: auto;
 }
 
 .market-screener {
-  background: #0a0a0a;
-  border: 1px solid #1e1e1e;
-  border-radius: 12px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 14px;
   margin: 1rem 1.5rem;
   overflow: hidden;
+  box-shadow: var(--shadow-soft);
 }
 
 .screener-columns {
@@ -54,7 +55,7 @@
 
 .screener-col {
   padding: 1rem 1.25rem;
-  border-right: 1px solid #1a1a1a;
+  border-right: 1px solid #e8eef5;
 }
 
 .screener-col:last-child {
@@ -69,9 +70,15 @@
   letter-spacing: 0.06em;
 }
 
-.buy-col .screener-col-title { color: #22c55e; }
-.sell-col .screener-col-title { color: #ef4444; }
-.hold-col .screener-col-title { color: #888; }
+.buy-col .screener-col-title {
+  color: #22c55e;
+}
+.sell-col .screener-col-title {
+  color: #ef4444;
+}
+.hold-col .screener-col-title {
+  color: #607287;
+}
 
 .screener-list {
   list-style: none;
@@ -84,7 +91,7 @@
   flex-direction: column;
   gap: 0.15rem;
   padding: 0.4rem 0;
-  border-bottom: 1px solid #141414;
+  border-bottom: 1px solid #eef3f8;
   font-size: 0.9rem;
 }
 
@@ -92,9 +99,15 @@
   border-bottom: none;
 }
 
-.buy-col .screener-symbol { color: #22c55e; }
-.sell-col .screener-symbol { color: #ef4444; }
-.hold-col .screener-symbol { color: #888; }
+.buy-col .screener-symbol {
+  color: #22c55e;
+}
+.sell-col .screener-symbol {
+  color: #ef4444;
+}
+.hold-col .screener-symbol {
+  color: #607287;
+}
 
 .screener-symbol {
   font-weight: 600;
@@ -102,11 +115,11 @@
 
 .screener-meta {
   font-size: 0.75rem;
-  color: #555;
+  color: var(--text-muted);
 }
 
 .screener-empty {
-  color: #444;
+  color: var(--text-muted);
   font-size: 0.85rem;
   padding: 0.4rem 0;
 }

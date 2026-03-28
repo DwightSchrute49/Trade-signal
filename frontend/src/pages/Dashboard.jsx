@@ -4,7 +4,7 @@ import { gsap } from "gsap";
 import Navbar from "../components/Navbar";
 import SignalTable from "../components/SignalTable";
 import StockChart from "../components/StockChart";
-import { fetchSignals, fetchStockData, fetchReversalAlerts, fetchTopBuys } from "../api";
+import { fetchSignals, fetchStockData } from "../api";
 import "./Dashboard.css";
 
 export default function Dashboard() {
@@ -19,13 +19,14 @@ export default function Dashboard() {
   const [stockLoading, setStockLoading] = useState(false);
   const [stockError, setStockError] = useState("");
 
-  const [reversalAlerts, setReversalAlerts] = useState([]);
-  const [bestBuys, setBestBuys] = useState([]);
-
   // Stats
+  const totalCount = signals.length;
   const buyCount = signals.filter((s) => s.signal === "BUY").length;
   const sellCount = signals.filter((s) => s.signal === "SELL").length;
   const holdCount = signals.filter((s) => s.signal === "HOLD").length;
+  const buyPct = totalCount ? Math.round((buyCount / totalCount) * 100) : 0;
+  const sellPct = totalCount ? Math.round((sellCount / totalCount) * 100) : 0;
+  const holdPct = totalCount ? Math.round((holdCount / totalCount) * 100) : 0;
 
   const loadSignals = useCallback(async () => {
     try {
@@ -35,19 +36,6 @@ export default function Dashboard() {
       console.error("Could not fetch signals");
     } finally {
       setLoading(false);
-    }
-  }, []);
-
-  const loadInsights = useCallback(async () => {
-    try {
-      const [alerts, opportunities] = await Promise.all([
-        fetchReversalAlerts(),
-        fetchTopBuys(),
-      ]);
-      setReversalAlerts(alerts || []);
-      setBestBuys(opportunities || []);
-    } catch {
-      console.error("Could not fetch trading insights");
     }
   }, []);
 
@@ -62,9 +50,11 @@ export default function Dashboard() {
       const data = await fetchStockData(symbol);
       setStockData(data);
     } catch (err) {
-      setStockError(err.response?.status === 404
-        ? `Stock "${symbol}" not found.`
-        : "Failed to load stock data. Ensure the backend is running.");
+      setStockError(
+        err.response?.status === 404
+          ? `Stock "${symbol}" not found.`
+          : "Failed to load stock data. Ensure the backend is running.",
+      );
       setStockData(null);
     } finally {
       setStockLoading(false);
@@ -77,13 +67,6 @@ export default function Dashboard() {
     const interval = setInterval(loadSignals, 30000);
     return () => clearInterval(interval);
   }, [loadSignals]);
-
-  // Trading insights: fetch every 30s
-  useEffect(() => {
-    loadInsights();
-    const interval = setInterval(loadInsights, 30000);
-    return () => clearInterval(interval);
-  }, [loadInsights]);
 
   // Default stock on mount
   useEffect(() => {
@@ -99,12 +82,12 @@ export default function Dashboard() {
     gsap.fromTo(
       heroRef.current,
       { opacity: 0, y: 20 },
-      { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" }
+      { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" },
     );
     gsap.fromTo(
       panelRef.current,
       { opacity: 0, y: 30 },
-      { opacity: 1, y: 0, duration: 0.8, ease: "power3.out", delay: 0.3 }
+      { opacity: 1, y: 0, duration: 0.8, ease: "power3.out", delay: 0.3 },
     );
   }, []);
 
@@ -112,68 +95,45 @@ export default function Dashboard() {
     <div className="dashboard">
       <Navbar onScanComplete={loadSignals} />
 
-      {/* Trading Insight Panels */}
-      <div className="insight-panels">
-        <div className="insight-panel reversal-panel">
-          <h3 className="insight-panel-title">⚡ Reversal Alerts</h3>
-          <ul className="insight-list">
-            {reversalAlerts.map((a) => (
-              <li key={a.symbol} className="insight-item">
-                <span className="insight-symbol">{a.symbol.replace(".NS", "")}</span>
-                <span className="insight-price">Price ₹{a.price}</span>
-                <span className={`insight-rsi ${a.rsi < 25 ? "rsi-bright" : "rsi-green"}`}>
-                  RSI {a.rsi}
-                </span>
-                <span className="insight-badge">⚡ Potential Bounce</span>
-              </li>
-            ))}
-            {reversalAlerts.length === 0 && (
-              <li className="insight-empty">No reversal alerts</li>
-            )}
-          </ul>
-        </div>
-        <div className="insight-panel bestbuy-panel">
-          <h3 className="insight-panel-title">🔥 Best Buy Opportunities</h3>
-          <ul className="insight-list">
-            {bestBuys.map((b) => (
-              <li key={b.symbol} className="insight-item">
-                <span className="insight-symbol">{b.symbol.replace(".NS", "")}</span>
-                <span className="insight-price">Price ₹{b.price}</span>
-                <span className="insight-rsi">{b.rsi}</span>
-                <span className="insight-badge bullish">📈 Strong Trend</span>
-              </li>
-            ))}
-            {bestBuys.length === 0 && (
-              <li className="insight-empty">No best buy opportunities</li>
-            )}
-          </ul>
-        </div>
-      </div>
-
       {/* Hero Stats */}
       <div ref={heroRef} className="hero-section">
         <div className="hero-section-row">
           <div className="stat-cards">
             <div className="stat-card total">
-              <span className="stat-num">{signals.length}</span>
               <span className="stat-label">Total Signals</span>
+              <span className="stat-num">{totalCount}</span>
+              <span className="stat-sub">Rolling live snapshot</span>
             </div>
             <div className="stat-card buy">
+              <span className="stat-label">Buy</span>
               <span className="stat-num">{buyCount}</span>
-              <span className="stat-label">▲ BUY</span>
+              <span className="stat-sub">{buyPct}% of tracked signals</span>
             </div>
             <div className="stat-card sell">
+              <span className="stat-label">Sell</span>
               <span className="stat-num">{sellCount}</span>
-              <span className="stat-label">▼ SELL</span>
+              <span className="stat-sub">{sellPct}% of tracked signals</span>
             </div>
             <div className="stat-card hold">
+              <span className="stat-label">Hold</span>
               <span className="stat-num">{holdCount}</span>
-              <span className="stat-label">— HOLD</span>
+              <span className="stat-sub">{holdPct}% of tracked signals</span>
             </div>
           </div>
-          <Link to="/market-screener" className="btn-market-screener">
-            ⚡ Market Screener
-          </Link>
+          <div className="hero-buttons">
+            <Link
+              to="/reversal-alerts"
+              className="btn-market-screener btn-reversal"
+            >
+              Reversal Alerts
+            </Link>
+            <Link to="/best-buys" className="btn-market-screener btn-bestbuy">
+              Best Buy Setups
+            </Link>
+            <Link to="/market-screener" className="btn-market-screener">
+              Market Screener
+            </Link>
+          </div>
         </div>
       </div>
 
@@ -183,7 +143,7 @@ export default function Dashboard() {
         <div className="column-left">
           <div className="panel">
             <div className="panel-header">
-              <h2 className="panel-title">⚡ Live Signals</h2>
+              <h2 className="panel-title">Live Signals</h2>
               <span className="live-dot" />
               <span className="live-text">Auto-refreshes every 30s</span>
             </div>
@@ -195,7 +155,7 @@ export default function Dashboard() {
         <div className="column-right">
           <div className="search-bar-wrap">
             <div className="search-bar">
-              <span className="search-icon">🔎</span>
+              <span className="search-icon">Search</span>
               <input
                 type="text"
                 className="search-input"

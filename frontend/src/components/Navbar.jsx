@@ -16,7 +16,7 @@ export default function Navbar({ onScanComplete }) {
     gsap.fromTo(
       navRef.current,
       { y: -80, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" }
+      { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" },
     );
   }, []);
 
@@ -25,10 +25,10 @@ export default function Navbar({ onScanComplete }) {
     setScanMsg("");
     try {
       const res = await triggerScan();
-      setScanMsg(`✅ Scanned ${res.scanned} stocks`);
+      setScanMsg(`Scanned ${res.scanned} stocks successfully`);
       if (onScanComplete) onScanComplete();
     } catch {
-      setScanMsg("❌ Scan failed — is the backend running?");
+      setScanMsg("Scan failed. Please check backend connectivity.");
     } finally {
       setScanning(false);
       setTimeout(() => setScanMsg(""), 4000);
@@ -43,8 +43,8 @@ export default function Navbar({ onScanComplete }) {
   return (
     <nav ref={navRef} className="navbar">
       <div className="navbar-brand">
-        <span className="brand-icon">⚡</span>
-        <span className="brand-title">Trading Signal Bot</span>
+        <img src="/logo.jpg" alt="" className="brand-logo" />
+        <span className="brand-title">TradePulse</span>
         <span className="brand-tag">NSE Live</span>
       </div>
 
@@ -59,18 +59,26 @@ export default function Navbar({ onScanComplete }) {
           disabled={scanning}
         >
           {scanning ? (
-            <><span className="spinner" /> Scanning…</>
+            <>
+              <span className="spinner" /> Scanning…
+            </>
           ) : (
-            "🔍 Scan Now"
+            "Run Scan"
           )}
         </button>
 
         {user && (
           <div className="user-chip">
-            <span className="user-avatar">{user.username?.[0]?.toUpperCase()}</span>
+            <span className="user-avatar">
+              {user.username?.[0]?.toUpperCase()}
+            </span>
             <span className="user-name">{user.username}</span>
-            <button className="btn-logout" onClick={handleLogout} title="Sign out">
-              ↩
+            <button
+              className="btn-logout"
+              onClick={handleLogout}
+              title="Sign out"
+            >
+              Sign out
             </button>
           </div>
         )}
